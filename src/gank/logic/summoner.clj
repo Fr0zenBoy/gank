@@ -1,15 +1,11 @@
 (ns gank.logic.summoner
-  (:require [gank.igredients.champions :as data]))
-
+  (:require [gank.diplomat.get-riot-api :as riot]))
 
 (defn character-id [characters]
   (let [names (->> characters
                    :data
                    (map first))]
     (map #(select-keys (-> characters :data %) [:key :name]) names)))
-
-
-(character-id data/characters)
 
 (def maestria '({:championId "427" :level 1}
                 {:championId "80" :level 4}))
@@ -23,11 +19,8 @@
 
 (defn match-keys [summoner-mastery]
   (let [key (:championId summoner-mastery)
-        matching-map (find-first #(-> % :key (= key)) (character-id data/characters))]
+        matching-map (find-first #(-> % :key (= key)) (character-id (riot/champion-data riot/champion-data-url "9.20.1" riot/input-key)))]
     (merge summoner-mastery matching-map)))
 
-(map match-keys maestria)
-
-
-
-
+(defn player-champions [maestria]
+  (map match-keys maestria))
