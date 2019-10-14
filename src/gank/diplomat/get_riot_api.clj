@@ -17,13 +17,13 @@
 
 (defn summoner [api-url nick key]
   (get-riot-api (str api-url
-                 "/lol/summoner/v4/summoners/by-name/" nick key)))
+                     "/lol/summoner/v4/summoners/by-name/" nick key)))
 
 (defn summoner-maestry [api-url nick key]
   (let [summonerid ((summoner api-url nick key) :id)]
     (get-riot-api (str api-url
-                   "/lol/champion-mastery/v4/champion-masteries/by-summoner/" 
-                   summonerid key))))
+                       "/lol/champion-mastery/v4/champion-masteries/by-summoner/"
+                       summonerid key))))
 
 (defn summoner-rank [api-url nick key]
   (let [encrypted-summoner-id ((summoner api-url nick key) :id)]

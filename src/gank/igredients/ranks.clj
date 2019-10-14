@@ -1,12 +1,19 @@
 (ns gank.igredients.ranks)
 
+(def DIAMOND 500)
+(def PLATINUM 400)
+(def GOLD 300)
+(def SILVER 200)
+(def BRONZE 100)
+(def IRON 10)
+
 (defn queues [name]
- (let [nickname (clojure.string/lower-case name)]
-   (cond
-     (= nickname "soloduo") "RANKED_SOLO_5x5"
-     (= nickname "tft") "RANKED_TFT"
-     (= nickname "flex") "RANKED_FLEX_SR"
-     (= nickname "tftflex") "RANKED_FLEX_TT")))
+  (let [nickname (clojure.string/lower-case name)]
+    (cond
+      (= nickname "soloduo") "RANKED_SOLO_5x5"
+      (= nickname "tft") "RANKED_TFT"
+      (= nickname "flex") "RANKED_FLEX_SR"
+      (= nickname "tftflex") "RANKED_FLEX_TT")))
 
 (defn division [number]
   (cond
