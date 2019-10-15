@@ -7,7 +7,7 @@
   "
   (first (filter pred coll)))
 
-(defn convert-int-str [m key]
+(defn convert-int-str [key m]
   (map #(assoc % key (-> % (get key) str)) m))
 
 (defn sum-key-value [key m]

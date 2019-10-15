@@ -13,7 +13,7 @@
       (= nickname "soloduo") "RANKED_SOLO_5x5"
       (= nickname "tft") "RANKED_TFT"
       (= nickname "flex") "RANKED_FLEX_SR"
-      (= nickname "tftflex") "RANKED_FLEX_TT")))
+      (= nickname "tftflex") "RANKED_FLEX_TFT")))
 
 (defn division [number]
   (cond

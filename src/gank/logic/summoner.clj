@@ -1,6 +1,5 @@
 (ns gank.logic.summoner
-  (:require [gank.diplomat.get-riot-api :as riot]
-            [gank.logic.commons :as commons]))
+  (:require [gank.logic.commons :as commons]))
 
 (defn character-id [characters]
   (let [names (->> characters
