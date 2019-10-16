@@ -1,4 +1,4 @@
-(ns gank.test.ingredients.ranks-test
+(ns test.ingredients.ranks-test
   (:require [gank.igredients.ranks :as ranks]
             [midje.sweet :refer :all]))
 

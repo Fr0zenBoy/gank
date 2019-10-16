@@ -1,4 +1,4 @@
-(ns gank.test.logic.summoner-test
+(ns test.logic.summoner-test
   (:require [gank.logic.summoner :as summoner]
             [midje.sweet :refer :all]))
 

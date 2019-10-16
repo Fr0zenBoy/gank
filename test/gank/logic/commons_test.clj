@@ -1,4 +1,4 @@
-(ns gank.test.logic.commons-test
+(ns test.logic.commons-test
   (:require [gank.logic.commons :as commons]
             [midje.sweet :refer :all]))
 
