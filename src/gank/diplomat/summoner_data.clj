@@ -30,12 +30,14 @@
 (defn summoner [nick]
   (get-riot-api (endpoint-summoner nick)))
 
+(def summoner-memo (memoize summoner))
+
 (defn summoner-maestry [nick]
-  (let [summonerid ((summoner nick) :id)]
+  (let [summonerid ((summoner-memo nick) :id)]
     (get-riot-api (endpoint-summoner-maestry summonerid))))
 
 (defn summoner-rank [nick]
-  (let [encrypted-summoner-id ((summoner nick) :id)]
+  (let [encrypted-summoner-id ((summoner-memo nick) :id)]
     (get-riot-api (endpoint-summoner-rank encrypted-summoner-id))))
 
 (defn ranked-queue [queue tier division page]
