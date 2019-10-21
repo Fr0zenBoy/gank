@@ -64,3 +64,13 @@
 
 (fact "Sum all values ​​of a map and return a single value"
       (commons/sum-key-value :championPoints player-mastery) => 995442)
+
+(facts "formatting a string for searches using summoner name"
+       (fact "formatting a string for webrequest"
+             (commons/formated-nick "      DROGA É O BRAIÀ ") => "DROGA%20É%20O%20BRAIÀ")
+       
+       (fact "correct spaces at the end and beginning of a joint string"
+             (commons/formated-nick " KottoNette") => "KottoNette")
+       
+       (fact "doesn't format a string that is already in the ideal pattern"
+             (commons/formated-nick "SkyFaII") => "SkyFaII"))

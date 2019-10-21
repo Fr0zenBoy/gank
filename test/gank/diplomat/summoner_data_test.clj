@@ -5,10 +5,16 @@
 (facts "Generate a url compatible with get in riot api"
        (fact "Url for player data based on nickname"
              (s.data/endpoint-summoner "KottoNette") => (str "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/KottoNette?api_key=" s.data/API-KEY))
+
+       (fact "create correct url even when nickname has characters not accepted"
+             (s.data/endpoint-summoner "DROGA É O BRAIÀ") => (str "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/DROGA%20É%20O%20BRAIÀ?api_key=" s.data/API-KEY))
+
        (fact "Url for id based player data"
              (s.data/endpoint-summoner-maestry "pspyxm-GoK9qGIZHFVkg2NAxvWMitxhIHsVf_MgkkHJ6Ow") => (str "https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/pspyxm-GoK9qGIZHFVkg2NAxvWMitxhIHsVf_MgkkHJ6Ow?api_key=" s.data/API-KEY))
+
        (fact "Url for id based player rank data"
              (s.data/endpoint-summoner-rank "pspyxm-GoK9qGIZHFVkg2NAxvWMitxhIHsVf_MgkkHJ6Ow") => (str "https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/pspyxm-GoK9qGIZHFVkg2NAxvWMitxhIHsVf_MgkkHJ6Ow?api_key=" s.data/API-KEY))
+
        (fact "Url for ranked queue"
              (s.data/endpoint-ranked-queue "RANKED_SOLO_5x5" "CHALLENGER" "I" "1") => (str "https://br1.api.riotgames.com/lol/league-exp/v4/entries/RANKED_SOLO_5x5/CHALLENGER/I?page=1&api_key=" s.data/API-KEY)))
 

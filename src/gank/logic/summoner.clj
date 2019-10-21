@@ -5,7 +5,7 @@
   (let [names (->> characters
                    :data
                    (map first))]
-    (map #(select-keys (-> characters :data %) [:key :name]) names)))
+    (map #(select-keys (-> characters :data %) [:key :name :tags]) names)))
 
 (defn match-keys [summoner-mastery champions-data]
   (let [key          (:championId summoner-mastery)

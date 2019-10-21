@@ -18,7 +18,9 @@
       (= input "summoner") summoner
       (= input "mastery") mastery
       (= input "rune") rune
-      :default "6.24.1")))
+      :default "9.20.1")))
 
 (defn champion-data [resource-version riot-version]
   (s.data/get-riot-api (url-champion-data (version resource-version riot-version))))
+
+(def champion-data-memo (memoize champion-data))
