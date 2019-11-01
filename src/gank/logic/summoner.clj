@@ -10,7 +10,7 @@
 (defn match-keys [summoner-mastery champions-data]
   (let [key          (:championId summoner-mastery)
         matching-map (commons/find-first #(-> % :key (= key)) champions-data)]
-    (merge summoner-mastery champions-data)))
+    (merge summoner-mastery matching-map)))
 
 (defn player-champions [maestria champions-data]
   (map match-keys maestria champions-data))

@@ -18,7 +18,7 @@
       (= input "summoner") summoner
       (= input "mastery") mastery
       (= input "rune") rune
-      :default "9.20.1")))
+      :else "9.20.1")))
 
 (defn champion-data [resource-version riot-version]
   (s.data/get-riot-api (url-champion-data (version resource-version riot-version))))
