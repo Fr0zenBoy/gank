@@ -2,9 +2,7 @@
   (:require [gank.logic.commons :as commons]))
 
 (defn character-id [characters]
-  (let [names (->> characters
-                   :data
-                   (map first))]
+  (let [names (->> characters :data (map first))]
     (map #(select-keys (-> characters :data %) [:key :name :tags]) names)))
 
 (defn match-keys [summoner-mastery champions-data]

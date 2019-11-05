@@ -26,4 +26,3 @@
   (->> player-tyer
        clojure.string/upper-case))
 
-

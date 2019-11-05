@@ -1,7 +1,7 @@
 (ns gank.service
   (:require [io.pedestal.http :as http]
-            [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
+            [io.pedestal.http.route :as route]
             [ring.util.response :as ring-resp]))
 
 (defn about-page
@@ -79,4 +79,4 @@
                                         ;; Alternatively, You can specify you're own Jetty HTTPConfiguration
                                         ;; via the `:io.pedestal.http.jetty/http-configuration` container option.
                                         ;:io.pedestal.http.jetty/http-configuration (org.eclipse.jetty.server.HttpConfiguration.)
-                                        }})
+}})

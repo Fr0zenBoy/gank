@@ -3,6 +3,31 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
+
+  :plugins [[s3-wagon-private "1.3.1"]
+            [lein-modules "0.3.11"]
+            [lein-ancient "0.6.15"]
+            [lein-exec "0.3.6"]
+            [lein-environ "1.1.0"]
+            [lein-cljfmt "0.5.7"]
+            [lein-kibit "0.1.6"]
+            [lein-nsorg "0.2.0"]]
+
+  :cljfmt {:indents {flow         [[:block 1]]
+                     facts        [[:block 1]]
+                     fact         [[:block 1]]
+                     as-customer  [[:block 1]]
+                     as-of        [[:block 1]]
+                     assoc        [[:block 1]]
+                     let-entities [[:block 2]]
+                     provided     [[:inner 0]]
+                     tabular      [[:inner 0]]
+                     system-map   [[:block 0]]}}
+
+  :aliases {"lint"        ["do" ["cljfmt" "check"] ["nsorg"]]
+            "lint-fix"    ["do" ["cljfmt" "fix"] ["nsorg" "--replace"]]
+            "install-all" ["do" ["shell" "../scripts/install"]]}
+
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [io.pedestal/pedestal.service "0.5.7"]
                  ;; Remove this line and uncomment one of the next lines to

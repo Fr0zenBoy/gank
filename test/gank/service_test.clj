@@ -1,8 +1,8 @@
 (ns gank.service-test
   (:require [clojure.test :refer :all]
-            [io.pedestal.test :refer :all]
+            [gank.service :as service]
             [io.pedestal.http :as bootstrap]
-            [gank.service :as service]))
+            [io.pedestal.test :refer :all]))
 
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
