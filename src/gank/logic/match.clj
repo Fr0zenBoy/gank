@@ -23,5 +23,9 @@
 
 (def matchid-list (d.match/summoner-matchs "KottoNette"))
 
-#_(let [matches    (get matchid-list :matches)
-        match-list (map :gameId matches)])
+(defn calc-win-rate [accountId nick]
+  (let [matches    (-> nick d.match/summoner-matchs (get :matches))
+        match-list (map :gameId matches)]
+    (map #(win-match? accountId %) match-list)))
+
+(calc-win-rate "nAxFJW2DCzBFFt2RFACFY2jgvZqb6fIumwYePV4hEEG5" "KottoNette")
