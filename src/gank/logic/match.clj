@@ -1,6 +1,5 @@
 (ns gank.logic.match
   (:require [gank.diplomat.match :as d.match]
-            [gank.diplomat.summoner :as d.commons]
             [gank.logic.commons :as l.commons]))
 
 (defn participants [match-id]
@@ -21,11 +20,16 @@
       (get-in [:stats :win])
       (true?)))
 
-(def matchid-list (d.match/summoner-matchs "KottoNette"))
-
-(defn calc-win-rate [accountId nick]
+(defn result-match-list [accountId nick]
   (let [matches    (-> nick d.match/summoner-matchs (get :matches))
         match-list (map :gameId matches)]
     (map #(win-match? accountId %) match-list)))
 
-(calc-win-rate "nAxFJW2DCzBFFt2RFACFY2jgvZqb6fIumwYePV4hEEG5" "KottoNette")
+(defn calc-win-rate [accountId nick]
+  (let [m-list (result-match-list accountId nick)
+        total (count m-list)
+        win-rate (->> m-list (filter true?) count)
+        loss (- total win-rate)]
+        {:win-rate win-rate
+         :loss loss
+         :total total}))
