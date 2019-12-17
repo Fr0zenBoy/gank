@@ -3,7 +3,7 @@
             [gank.logic.commons :as l.commons]
             [midje.sweet :refer :all]))
 
-(def endpoint (str"https://br1.api.riotgames.com/lol/platform/v3/champion-rotations" d.commons/input-key))
+(def endpoint (str "https://br1.api.riotgames.com/lol/platform/v3/champion-rotations" d.commons/input-key))
 
 (fact "Simple get in Riot API"
   (let [response (d.commons/get-riot-api endpoint)]

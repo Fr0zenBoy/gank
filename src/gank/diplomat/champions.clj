@@ -1,28 +1,28 @@
 (ns gank.diplomat.champions
-  (:require [gank.diplomat.commons :as d.commons]))
+  (:require [gank.diplomat.commons :as diplomat.commons]))
 
-(def riot-data-url "http://ddragon.leagueoflegends.com/")
+(def ^:private riot-data-url "http://ddragon.leagueoflegends.com/")
 
-(def riot-data-version-url "http://ddragon.leagueoflegends.com/realms/na.json")
+(def ^:private riot-data-version-url "http://ddragon.leagueoflegends.com/realms/na.json")
 
-(def riot-data-version (-> (d.commons/get-riot-api (str riot-data-version-url d.commons/input-key)) (get :n)))
+(def ^:private riot-data-version (->> riot-data-version-url
+                                     diplomat.commons/get-riot-api
+                                     :n))
 
-(defn url-champion-data [version]
+(defn- url-champion-data [version]
   (str riot-data-url "cdn/"
        version "/data/en_US/champion.json"
-       d.commons/input-key))
+       diplomat.commons/input-key))
 
-(defn version [type {:keys [item champion summoner mastery rune]}]
-  (let [input (clojure.string/lower-case type)]
-    (cond
-      (= input "item") item
-      (= input "champion") champion
-      (= input "summoner") summoner
-      (= input "mastery") mastery
-      (= input "rune") rune
-      :else "9.20.1")))
+(defn version [type]
+  (let [resource (clojure.string/lower-case type)]
+    (->> resource
+         keyword
+         riot-data-version)))
 
-(defn champion-data [resource-version riot-version]
-  (d.commons/get-riot-api (url-champion-data (version resource-version riot-version))))
+(defn- get-data [type]
+  (->> (version type)
+       url-champion-data
+       diplomat.commons/get-riot-api))
 
-(def champion-data-memo (memoize champion-data))
+(def champion-data (memoize get-data))

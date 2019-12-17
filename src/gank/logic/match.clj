@@ -12,8 +12,12 @@
   (l.commons/find-first #(= (-> % :player :accountId) accountId) (participantIdentities match-id)))
 
 (defn participant-perform [accountId match-id]
-  (let [identit           (get (player-identit accountId match-id) :participantId)]
+  (let [identit            (get (player-identit accountId match-id) :participantId)]
     (l.commons/find-first #(= (-> % :participantId) identit) (participants match-id))))
+
+(defn players-perform [match-id]
+  (let [players (map #(get-in % [:player :accountId]) (participantIdentities match-id))]
+    (map #(participant-perform % match-id) players)))
 
 (defn win-match? [accountId match-id]
   (-> (participant-perform accountId match-id)
@@ -30,6 +34,6 @@
         total (count m-list)
         win-rate (->> m-list (filter true?) count)
         loss (- total win-rate)]
-        {:win-rate win-rate
-         :loss loss
-         :total total}))
+    {:win-rate win-rate
+     :loss loss
+     :total total}))

@@ -1,26 +1,24 @@
 (ns gank.diplomat.summoner
-  (:require [gank.diplomat.commons :as d.commons]
-            [gank.diplomat.summoner :as d.summoner]
-            [gank.logic.commons :as l.commons]))
+  (:require [gank.diplomat.commons :as diplomat.commons]
+            [gank.logic.commons :as logic.commons]))
 
 (defn endpoint-summoner [nick-name]
-  (str d.commons/api-url
+  (str diplomat.commons/api-url
        "/lol/summoner/v4/summoners/by-name/"
-       (l.commons/formated-nick nick-name)
-       d.commons/input-key))
+       (logic.commons/formated-nick nick-name)))
 
 (defn endpoint-summoner-maestry [summoner-id]
-  (str d.commons/api-url
+  (str diplomat.commons/api-url
        "/lol/champion-mastery/v4/champion-masteries/by-summoner/"
-       summoner-id
-       d.commons/input-key))
+       summoner-id))
 
-(defn summoner [nick]
-  (d.commons/get-riot-api (endpoint-summoner nick)))
+(defn get-summoner [nick]
+  (->> (endpoint-summoner nick) 
+       diplomat.commons/get-riot-api))
 
-(def summoner-memo (memoize summoner))
+(def summoner (memoize get-summoner))
 
 (defn summoner-maestry [nick]
-  (let [summonerid ((summoner-memo nick) :id)]
-    (d.commons/get-riot-api
-     (endpoint-summoner-maestry summonerid))))
+  (let [summonerid ((summoner nick) :id)]
+    (->> (endpoint-summoner-maestry summonerid) 
+         diplomat.commons/get-riot-api)))
