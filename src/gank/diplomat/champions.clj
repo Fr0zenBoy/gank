@@ -6,13 +6,12 @@
 (def ^:private riot-data-version-url "http://ddragon.leagueoflegends.com/realms/na.json")
 
 (def ^:private riot-data-version (->> riot-data-version-url
-                                     diplomat.commons/get-riot-api
+                                     diplomat.commons/api-get
                                      :n))
 
 (defn- url-champion-data [version]
   (str riot-data-url "cdn/"
-       version "/data/en_US/champion.json"
-       diplomat.commons/input-key))
+       version "/data/en_US/champion.json"))
 
 (defn version [type]
   (let [resource (clojure.string/lower-case type)]
@@ -23,6 +22,6 @@
 (defn- get-data [type]
   (->> (version type)
        url-champion-data
-       diplomat.commons/get-riot-api))
+       diplomat.commons/api-get))
 
 (def champion-data (memoize get-data))
