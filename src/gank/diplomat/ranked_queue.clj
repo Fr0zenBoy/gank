@@ -9,11 +9,9 @@
                                    division
                                    "?page="
                                    page)]
-    (->> endpoint-ranked-queue
-         diplomat.commons/get-riot-api)))
+    (diplomat.commons/get-riot-api endpoint-ranked-queue)))
 
 (defn summoner-rank [nick]
   (let [encrypted-summoner-id (-> (diplomat.summoner/summoner nick) :id)
         endpoint-summoner-rank (str "/lol/league/v4/entries/by-summoner/" encrypted-summoner-id)]
-    (->> endpoint-summoner-rank
-         diplomat.commons/get-riot-api)))
+    (diplomat.commons/get-riot-api endpoint-summoner-rank)))

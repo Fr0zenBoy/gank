@@ -1,27 +1,17 @@
 (ns gank.diplomat.champions
   (:require [gank.diplomat.commons :as diplomat.commons]))
 
-(def ^:private riot-data-url "http://ddragon.leagueoflegends.com/")
+(def ^:private riot-data-version ((diplomat.commons/get-ddgragon-api "/realms/na.json") :n))
 
-(def ^:private riot-data-version-url "http://ddragon.leagueoflegends.com/realms/na.json")
-
-(def ^:private riot-data-version (->> riot-data-version-url
-                                     diplomat.commons/api-get
-                                     :n))
-
-(defn- url-champion-data [version]
-  (str riot-data-url "cdn/"
-       version "/data/en_US/champion.json"))
-
-(defn version [type]
+(defn- version [type]
   (let [resource (clojure.string/lower-case type)]
     (->> resource
          keyword
          riot-data-version)))
 
 (defn- get-data [type]
-  (->> (version type)
-       url-champion-data
-       diplomat.commons/api-get))
+  (let [resource-version (version type)
+        endpoint (str "/cdn/" resource-version "/data/en_US/champion.json")]
+    (diplomat.commons/get-ddgragon-api endpoint)))
 
 (def champion-data (memoize get-data))
