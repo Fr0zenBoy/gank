@@ -10,8 +10,11 @@
 (defn contains-many? [m & ks]
   (every? #(contains? m %) ks))
 
-(defn convert-int-str [k m]
-  (map #(update % k str) m))
+(defn- parse-int [x]
+  (Integer/parseInt x))
+
+(defn convert-int-keyval [k m]
+  (map #(update % k parse-int) m))
 
 (defn sum-key-value [k m]
   (reduce + (map #(get % k) m)))

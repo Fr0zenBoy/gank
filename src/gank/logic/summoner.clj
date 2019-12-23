@@ -1,14 +1,13 @@
 (ns gank.logic.summoner
   (:require [gank.logic.commons :as logic.commons]))
 
-(defn character-id [characters]
-  (let [names (->> characters :data (map first))]
-    (map #(select-keys (-> characters :data %) [:key :name :tags]) names)))
+(defn champions-resume [chars]
+  (let [names   (->> chars :data keys)
+        filters (map #(select-keys (-> chars :data %) [:key :name :tags]) names)]
+    (logic.commons/convert-int-keyval :key filters)))
 
-(defn match-keys [summoner-mastery champions-data]
+(defn match-keys [champions-data summoner-mastery]
   (let [key          (:championId summoner-mastery)
         matching-map (logic.commons/find-first #(-> % :key (= key)) champions-data)]
-    (merge summoner-mastery matching-map)))
+    (map #(merge % matching-map) summoner-mastery)))
 
-(defn player-champions [maestria champions-data]
-  (map match-keys maestria champions-data))

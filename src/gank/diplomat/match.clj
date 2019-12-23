@@ -16,8 +16,8 @@
   (let [account-id (get (diplomat.summoner/summoner summoner) :accountId)]
     (diplomat.commons/get-riot-api (endpoint-match-list account-id))))
 
-(defn- match-data [matchId]
-  (let [endpint-match-by-id (str "/lol/match/v4/matches/" matchId)]
-    (diplomat.commons/get-riot-api endpint-match-by-id)))
+(defn- get-match [matchId]
+  (let [endpoint (str "/lol/match/v4/matches/" matchId)]
+    (diplomat.commons/get-riot-api endpoint)))
 
-(def match-data-memo (memoize match-data))
+(def match-data (memoize get-match))
