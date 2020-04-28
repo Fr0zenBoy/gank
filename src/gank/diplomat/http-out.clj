@@ -4,7 +4,7 @@
             [clj-http.client :as http]
             [clojure.string :as string]
             [gank.logic.commons :as logic.commons]
-            [schema.core :as s :as s]))
+            [schema.core :as s]))
 
 (def ^:private API-KEY (System/getenv "RIOT_KEY"))
 
@@ -16,19 +16,19 @@
                                       "Accept-Language" "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5"
                                       "X-Riot-Token" API-KEY}})
 
-(defn- preparete-url [base-url endpoint]
-  (str base-url endpoint))
+(defn- preparete-url [base-url path]
+  (str base-url path))
 
-(defn- make-endpoint [endpoint args]
+(defn- make-path [path args]
   (cond
-    (not (clojure.string/includes? endpoint "?"))
-      endpoint
+    (not (clojure.string/includes? path "?"))
+      path
     :else
-      (clojure.string/replace-first endpoint "?" args)))
+    (recur (clojure.string/replace-first path "?" (first args)) (rest args))))
 
-(defn- api-get [api-url endpoint args]
-  (let [endpoint (make-endpoint endpoint args)
-        url (preparete-url api-url endpoint)]
+(defn- api-get [api-url path args]
+  (let [path (make-path path args)
+        url (preparete-url api-url path)]
   (-> url
       (http/get api-headers)
       :body
@@ -36,7 +36,7 @@
 
 (def get-riot-api (partial api-get riot-api-url))
 
-(def ^:private lol-endpoits 
+(def ^:private lol-paths
   {:mastery    {:all-champions       "/lol/champion-mastery/v4/champion-masteries/by-summoner/?"
                 :spefic-champion     "/lol/champion-mastery/v4/champion-masteries/by-summoner/?/by-champion/?"
                 :total-points        "/lol/champion-mastery/v4/scores/by-summoner/?"}
@@ -53,7 +53,7 @@
                 :master              "/lol/league/v4/masterleagues/by-queue/?"}
    :lol-status {:shards              "/lol/status/v3/shard-data"}
    :match      {:match-data          "/lol/match/v4/matches/?"
-                :player              "/lol/match/v4/matchlists/by-account/?"
+                :account-id          "/lol/match/v4/matchlists/by-account/?"
                 :time-line           "/lol/match/v4/timelines/by-match/?"
                 :tournaments         "/lol/match/v4/matches/by-tournament-code/?/ids"
                 :tournament-match    "/lol/match/v4/matches/?/by-tournament-code/?"}
@@ -64,7 +64,7 @@
                 :puuid               "/lol/summoner/v4/summoners/by-puuid/?"
                 :summoner-id         "/lol/summoner/v4/summoners/?"}})
 
-(def ^:private tft-endpoints
+(def ^:private tft-paths
   {:leagues    {:challenger          "/tft/league/v1/challenger"
                 :summoner-id         "/tft/league/v1/entries/by-summoner/?"
                 :tier-division       "/tft/league/v1/entries/?/?"
@@ -78,50 +78,61 @@
                 :puuid               "/tft/summoner/v1/summoners/by-puuid/?"
                 :summoner-id         "/tft/summoner/v1/summoners/?"}})
 
-(s/defn ^:private get-api-endpoint :- s/Str
-  [resource :- s/Keyword 
+(s/defn ^:private get-api-path :- s/Str
+  [path-map
+   resource :- s/Keyword
    type     :- s/Keyword]
-  (get-in lol-endpoits [resource type]))
+  (get-in path-map [resource type]))
+
+(def ^:private get-lol-paths (partial get-api-path lol-paths))
+
+(def ^:private get-tft-paths (partial get-api-path tft-paths))
 
 (s/defn ^:private prep-summoner [player-nickname :- s/Str]
   (let [prep-nick (logic.commons/formated-nick player-nickname)
-        endpoint (get-api-endpoint :summoner :name)]
-    (get-riot-api endpoint prep-nick)))
+        path (get-lol-paths :summoner :name)]
+    (get-riot-api path [prep-nick])))
 
 (def summoner-profile (memoize prep-summoner))
 
-(s/defn summoner-mastery-data [player-nickname :- s/Str]
-  (let [summoner-id (get (summoner-profile player-nickname) :id)
-        endpoint    (get-api-endpoint :summoner :summoner-id)]
-    (get-riot-api endpoint summoner-id)))
+(s/defn basic-get-summoner
+  [id                    :- s/Keyword
+   player-nickname       :- [s/Str]
+   api-path-category :- s/Keyword
+   filter                :- s/Keyword]
+  (let [sumonner-id (get (summoner-profile player-nickname) id)
+        path    (get-lol-paths api-path-category filter)]
+    (get-riot-api path sumonner-id)))
+
+(def get-summoner-with-summoner-id (partial basic-get-summoner :id))
+(def get-summoner-with-account-id  (partial basic-get-summoner :accountId))
+
 
 (def get-ddgragon-api (partial api-get riot-data-url))
 
-(def ^:private ddragon-endpoints 
-  {:versions  "/realms/na.json"
-   :champion "/cdn/?/data/en_US/champion.json"
-   :item     "/cdn/?/data/en_US/item.json"
-   :summoner  "/cdn/?/data/en_US/summoner.json"})
+(def ^:private ddragon-paths
+   {:versions "/realms/na.json"
+    :champion "/cdn/?/data/en_US/champion.json"
+    :item     "/cdn/?/data/en_US/item.json"
+    :summoner "/cdn/?/data/en_US/summoner.json"})
 
-(def ^:private filter-version
-  (-> (ddragon-endpoints :versions)
-      (get-ddgragon-api nil)
-      :n))
+(defn- filter-version []
+   (-> (ddragon-paths :versions)
+       (get-ddgragon-api nil)
+       :n))
 
 (defn- version [type]
-    (->> type
-         keyword
-         filter-version))
+   (get (filter-version) type))
 
 (defn- ddragon-resources [type]
-  (let [resource-version (version type)
-        endpoint         (ddragon-endpoints (keyword type))]
-    (get-ddgragon-api endpoint resource-version)))
+   (let [resource-version [(version type)]
+         path         (ddragon-paths (keyword type))]
+     (get-ddgragon-api path resource-version)))
 
 (def ^:private ddragon (memoize ddragon-resources))
 
-(def champion (ddragon "champion"))
+(def champion (ddragon :champion))
 
-(def item (ddragon "item"))
+(def item (ddragon :item))
 
-(def summoner (ddragon "summoner"))
+(def summoner (ddragon :summoner))

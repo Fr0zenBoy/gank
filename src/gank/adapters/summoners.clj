@@ -1,4 +1,4 @@
-(ns gank.logic.summoner
+(ns gank.adapters.summoners
   (:require [gank.logic.commons :as logic.commons]))
 
 (defn champions-resume [chars]
@@ -10,4 +10,3 @@
   (let [key          (:championId summoner-mastery)
         matching-map (logic.commons/find-first #(-> % :key (= key)) champions-data)]
     (map #(merge % matching-map) summoner-mastery)))
-
