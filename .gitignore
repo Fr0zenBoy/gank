@@ -1,5 +1,7 @@
 # Project related
 
+
+
 # Java related
 pom.xml
 pom.xml.asc
@@ -39,5 +41,6 @@ build/
 #idea
 .idea/
 .idea
+.DS_Store
 .vscode
 .vscode/
