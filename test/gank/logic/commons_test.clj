@@ -33,10 +33,10 @@
 
 (facts "formatting a string for searches using summoner name"
   (fact "formatting a string for webrequest"
-    (l.commons/formated-nick "      DROGA É O BRAIÀ ") => "DROGA%20É%20O%20BRAIÀ")
+    (l.commons/format-nick "      DROGA É O BRAIÀ ") => "DROGA%20É%20O%20BRAIÀ")
 
   (fact "correct spaces at the end and beginning of a joint string"
-    (l.commons/formated-nick " KottoNette ") => "KottoNette")
+    (l.commons/format-nick " KottoNette ") => "KottoNette")
 
   (fact "doesn't format a string that is already in the ideal pattern"
-    (l.commons/formated-nick "SkyFaII") => "SkyFaII"))
+    (l.commons/format-nick "SkyFaII") => "SkyFaII"))

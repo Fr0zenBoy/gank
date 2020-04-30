@@ -19,7 +19,7 @@
 (defn sum-key-value [k m]
   (reduce + (map #(get % k) m)))
 
-(defn formated-nick [nick]
-  (-> nick
+(defn format-nick [s]
+  (-> s
       (clojure.string/trim)
       (clojure.string/replace #" " "%20")))
