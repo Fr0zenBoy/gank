@@ -2,8 +2,6 @@
   (:require [cheshire.core :as cheshire]
             [clj-http.client :as http]
             [clojure.string :as string]
-            [gank.logic.commons :as logic.commons]
-            [gank.diplomat.http.discovery :as discovery]
             [schema.core :as s]))
 
 (def ^:private API-KEY (System/getenv "RIOT_KEY"))
@@ -13,13 +11,17 @@
                                       "Accept-Language" "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5"
                                       "X-Riot-Token" API-KEY}})
 
-(defn- preparete-url [base-url endpoints]
+(s/defn ^:private preparete-url 
+  [base-url  :- s/Str 
+   endpoints :- s/Str]
   (str base-url endpoints))
 
-(defn- make-endpoints [endpoints args]
+(s/defn ^:private make-endpoints 
+  [endpoints :- s/Str
+   args      :- [s/Str]]
   (cond
     (not (clojure.string/includes? endpoints "?"))
-      endpoints
+    endpoints
     :else
     (recur (clojure.string/replace-first endpoints "?" (first args)) (rest args))))
 
@@ -31,6 +33,6 @@
       :body
       (cheshire/parse-string true))))
 
-(def get-riot-api (partial simple-api-get! riot-api-url))
+(def get-riot-api     (partial simple-api-get! riot-api-url))
 (def get-ddgragon-api (partial simple-api-get! riot-data-url))
 

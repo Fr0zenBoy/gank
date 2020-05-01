@@ -59,3 +59,7 @@
 
 (def get-tft-endpoints (partial get-api-endpoints tft-endpoints))
 
+(s/defn get-ddragon-endpoints 
+  [resource :- s/Keyword]
+  (get ddragon-endpoints resource))
+
