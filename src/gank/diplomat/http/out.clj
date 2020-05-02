@@ -11,12 +11,12 @@
                                       "Accept-Language" "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5"
                                       "X-Riot-Token" API-KEY}})
 
-(s/defn ^:private preparete-url 
+(s/defn ^:private preparete-url :- s/Str
   [base-url  :- s/Str 
    endpoints :- s/Str]
   (str base-url endpoints))
 
-(s/defn ^:private make-endpoints 
+(s/defn ^:private make-endpoints :- s/Str
   [endpoints :- s/Str
    args      :- [s/Str]]
   (cond
@@ -25,7 +25,7 @@
     :else
     (recur (clojure.string/replace-first endpoints "?" (first args)) (rest args))))
 
-(defn- simple-api-get! [api-url endpoints args]
+(defn- simple-api-get! [api-url endpoints & args]
   (let [endpoints (make-endpoints endpoints args)
         url (preparete-url api-url endpoints)]
   (-> url

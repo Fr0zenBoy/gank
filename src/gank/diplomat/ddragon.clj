@@ -18,11 +18,10 @@
   [resource :- sc.ddragon/ddragon-resource]
   (let [resource-version  (filter-version resource)
         endpoints         (discovery/get-ddragon-endpoints resource)]
-    (http-out/get-ddgragon-api endpoints [resource-version])))
+    (http-out/get-ddgragon-api endpoints resource-version)))
 
 (def ^:private ddragon (memoize ddragon-resources))
 
 (def champion (ddragon :champion))
-champion
 (def item (ddragon :item))
 (def summoner (ddragon :summoner))

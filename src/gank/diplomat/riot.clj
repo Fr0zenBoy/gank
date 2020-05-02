@@ -8,7 +8,7 @@
 
 (s/defn ^:private prep-summoner-profile! :- sc.riot/summoner-data
   [player-nickname :- s/Str]
-  (let [formated-nick [(logic.commons/format-nick player-nickname)]
+  (let [formated-nick (logic.commons/format-nick player-nickname)
         endpoints (discovery/get-lol-endpoints :summoner :name)]
     (http-out/get-riot-api endpoints formated-nick)))
 
@@ -22,7 +22,7 @@
          args                   :- s/Any]
         (let [summoner-id (get (summoner-profile player-nickname) id)
               endpoints   (discovery/get-lol-endpoints api-endpoints-category filter)]
-          (http-out/get-riot-api endpoints [summoner-id args])))
+          (http-out/get-riot-api endpoints summoner-id args)))
 
 (def get-summoner-with-summoner-id! (partial basic-get-summoner! :id))
 (def get-summoner-with-account-id!  (partial basic-get-summoner! :accountId))
