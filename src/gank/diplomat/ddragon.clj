@@ -23,5 +23,6 @@
 (def ^:private ddragon (memoize ddragon-resources))
 
 (def champion (ddragon :champion))
+champion
 (def item (ddragon :item))
 (def summoner (ddragon :summoner))

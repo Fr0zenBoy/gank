@@ -1,10 +1,10 @@
-(ns gank.logic.commons)
+(ns gank.logic.commons
+  (:require [clojure.string :as string]))
 
-(defn find-first [pred coll]
-  "Return the first match of the predicate.
-  Example:
-    (find-first even? [1 2 3 4]) => 2
-  "
+(defn find-first 
+  "Return the first match of the predicate. 
+  Example: (find-first even? [1 2 3 4]) => 2" 
+  [pred coll]
   (first (filter pred coll)))
 
 (defn contains-many? [m & ks]
@@ -21,5 +21,5 @@
 
 (defn format-nick [s]
   (-> s
-      (clojure.string/trim)
-      (clojure.string/replace #" " "%20")))
+      (string/trim)
+      (string/replace #" " "%20")))
