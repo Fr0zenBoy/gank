@@ -68,13 +68,13 @@
 (s/defschema league-position league-position-skeleton)
 
 (def matchs-skeleton
-  {(s/required-key :matches) [{:platformId s/Str
-                               :gameId     Long
-                               :champion   s/Int
-                               :queue      s/Int
-                               :season     s/Int
-                               :timestamp  Long
-                               :role       s/Str
-                               :lane       s/Str}]})
+  {:matches [{:platformId s/Str
+              :gameId     Long
+              :champion   s/Int
+              :queue      s/Int
+              :season     s/Int
+              :timestamp  Long
+              :role       s/Str
+              :lane       s/Str}]})
 
 (s/defschema matchs matchs-skeleton)
