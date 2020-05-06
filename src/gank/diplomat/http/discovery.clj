@@ -3,7 +3,7 @@
 
 (def ^:private lol-endpoints
   {:mastery    {:all-champions       "/lol/champion-mastery/v4/champion-masteries/by-summoner/?"
-                :spefic-champion     "/lol/champion-mastery/v4/champion-masteries/by-summoner/?/by-champion/?"
+                :champion-id         "/lol/champion-mastery/v4/champion-masteries/by-summoner/?/by-champion/?"
                 :total-points        "/lol/champion-mastery/v4/scores/by-summoner/?"}
    :champions  {:rotation            "/lol/platform/v3/champion-rotations"}
    :clash      {:summoner            "/lol/clash/v1/players/by-summoner/?"
@@ -22,7 +22,7 @@
                 :time-line           "/lol/match/v4/timelines/by-match/?"
                 :tournaments         "/lol/match/v4/matches/by-tournament-code/?/ids"
                 :tournament-match    "/lol/match/v4/matches/?/by-tournament-code/?"}
-   :spectator  {:active-game          "/lol/spectator/v4/active-games/by-summoner/?"
+   :spectator  {:active-game         "/lol/spectator/v4/active-games/by-summoner/?"
                 :featured-games      "/lol/spectator/v4/featured-games"}
    :summoner   {:account-id          "/lol/summoner/v4/summoners/by-account/?"
                 :name                "/lol/summoner/v4/summoners/by-name/?"

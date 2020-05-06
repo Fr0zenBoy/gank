@@ -36,7 +36,7 @@
   "Get a champion mastery by player ID and champion ID"
   [player-nickname :- s/Str
    champion-id     :- Long]
-  (get-summoner-with-summoner-id! :mastery :spefic-champion player-nickname champion-id))
+  (get-summoner-with-summoner-id! :mastery :champion-id player-nickname champion-id))
 
 (s/defn summoner-mastery-total :- s/Int
   "Get a player's total champion mastery score, which is the sum of individual champion mastery levels"
@@ -52,3 +52,11 @@
   "Get match list for games played on given account ID and platform ID and filtered using given filter parameters, if any"
   [player-nickname :- s/Str]
   (get-summoner-with-account-id! :match :account-id player-nickname nil))
+
+(s/defn prep-match-by-id
+  "Get match by match ID"
+  [match-id :- s/Int]
+  (let [endpoint (discovery/get-lol-endpoints :match :match-data)]
+    (http-out/get-riot-api endpoint match-id)))
+
+(def match-by-id (memoize prep-match-by-id))

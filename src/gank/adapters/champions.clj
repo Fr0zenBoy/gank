@@ -13,4 +13,3 @@
 
 (s/defn champions-resume [champions]
   (logic.commons/convert-int-keyval :key (select-data champions)))
-
