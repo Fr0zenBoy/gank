@@ -18,18 +18,21 @@
 (defn matches [matches]
   (map :gameId (-> matches :matches)))
 
-(s/defn identity :- sc.summoner/identity
+(s/defn player-identity :- sc.summoner/player-identity
   [account-id :- s/Str
    match]
   (let [participants (get match :participantIdentities)]
-    (logic.commons/find-first #(-> % :player :accountId (identical? account-id)) participants)))
+    (logic.commons/find-first #(-> % :player :accountId (= account-id)) participants)))
 
 (s/defn perform :- sc.summoner/perform
   [account-id :- s/Str
    match]
-  (let [identity (get (identity account-id match) :participantId)
+  (let [player (get (player-identity account-id match) :participantId)
         participants (get match :participants)]
-    (logic.commons/find-first #(-> % :participantId (identical? identity)) participants)))
+    (logic.commons/find-first #(-> % :participantId (= player)) participants)))
+
+(defn tap [x]
+  (println x) x)
 
 (s/defn team :- sc.summoner/team
   [account-id :- s/Str

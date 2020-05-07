@@ -17,7 +17,7 @@
 
 (s/defschema champions-mastery champions-mastery-skeleton)
 
-(def identity-skeleton
+(def player-identity-skeleton
   {:participantId s/Int
    :player {:platformId s/Str
             :accountId s/Str
@@ -28,7 +28,7 @@
             :matchHistoryUri s/Str
             :profileIcon s/Int}})
 
-(s/defschema identity identity-skeleton)
+(s/defschema player-identity player-identity-skeleton)
 
 (def perform-skeleton
   ;TODO Improve this schema
