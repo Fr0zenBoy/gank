@@ -31,9 +31,6 @@
         participants (get match :participants)]
     (logic.commons/find-first #(-> % :participantId (= player)) participants)))
 
-(defn tap [x]
-  (println x) x)
-
 (s/defn team :- sc.summoner/team
   [account-id :- s/Str
    match]

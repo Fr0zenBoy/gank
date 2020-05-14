@@ -23,3 +23,6 @@
   (-> s
       (string/trim)
       (string/replace #" " "%20")))
+
+(defn percetage [occurrences total]
+  (format "%.2f" (float (* (/ occurrences total) 100))))

@@ -2,7 +2,8 @@
   (:require [gank.diplomat.riot :as riot]
             [gank.logic.summoner :as logic.summoner]
             [gank.schemata.summoner :as sc.summoner]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [gank.logic.commons :as logic.commons]))
 
 (def ^:private number-of-matchs 50)
 
@@ -21,6 +22,11 @@
 
 (s/defn count-wins
   [player-nickname :- s/Str]
-  (let [account-id (get (riot/summoner-profile player-nickname) :account-id)
+  (let [account-id (get (riot/summoner-profile player-nickname) :accountId)
         team-wins  (wins player-nickname account-id)]
     (count team-wins)))
+
+(s/defn win-rate
+  [player-nickname]
+  (let [ocurrences (count-wins player-nickname)]
+    (logic.commons/percetage ocurrences number-of-matchs)))
