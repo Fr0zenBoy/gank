@@ -2,7 +2,8 @@
   (:require [gank.diplomat.riot :as riot]
             [gank.logic.summoner :as logic.summoner]
             [gank.schemata.summoner :as sc.summoner]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [schema.coerce :as schema]))
 
 (def ^:private number-of-matchs 50)
 
