@@ -2,16 +2,16 @@
   (:require [gank.diplomat.http.discovery :as http.discovery]
             [cheshire.core :as cheshire]
             [clj-http.client :as http]
-            [schema.core :as s]))
+            [schema.core :as s]
+            [gank.logic.commons :as logic.commons]))
 
-(s/defn ^:private riot-client :- {s/Keyword s/Any}
+(s/defn ^:private client! :- {s/Keyword s/Any}
   []
-  (let [api-key (System/getenv "RIOT_KEY")]
-    {:riot-url     "https://br1.api.riotgames.com"
-     :ddragron-url "http://ddragon.leagueoflegends.com"
-     :header       {:headers {"Accept-Charset" "application/x-www-form-urlencoded; charset=UTF-8"
-                              "Accept-Language" "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5"
-                              "X-Riot-Token" api-key}}}))
+  {:riot-url     "https://br1.api.riotgames.com"
+   :ddragron-url "http://ddragon.leagueoflegends.com"
+   :header       {:headers {"Accept-Charset" "application/x-www-form-urlencoded; charset=UTF-8"
+                            "Accept-Language" "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5"
+                            "X-Riot-Token" (System/getenv "RIOT_KEY")}}})
 
 (s/defn ^:private make-url :- s/Str
   [base-url  :- s/Str 
@@ -27,20 +27,34 @@
     :else
     (recur (clojure.string/replace-first endpoints "?" (first args)) (rest args))))
 
-(s/defn ^:private api-get :- {s/Keyword s/Any}
+(s/defn ^:private api-get! :- {s/Keyword s/Any}
   [api-url   :- s/Str
    header    :- {s/Keyword s/Any}
-   endpoints :- s/Str
+   endpoint :- s/Str
    & args]
-  (let [endpoints (make-endpoints endpoints args)
-        url (make-url api-url endpoints)]
+  (let [endpoint (make-endpoints endpoint args)
+        url (make-url api-url endpoint)]
     (-> url
         (http/get header)
         :body
         (cheshire/parse-string true))))
 
-(s/defn get-riot-api [client endpoint & args]
-  (let [url    (:riot-url client)
-        header (:header client)]
-    (api-get url header endpoint args)))
+(defn lol-api
+  [{:keys [riot-url header] :as _client}
+   resource
+   filter
+   & args]
+  (let [endpoint (http.discovery/get-lol-endpoints resource filter)]
+    (api-get! riot-url header endpoint args)))
 
+(defn memoize-player-identity [client summoner-nickname]
+  (->> summoner-nickname
+       logic.commons/format-nick
+       (lol-api client :summoner :name)))
+
+(def player-identity (memoize memoize-player-identity))
+
+(defn prep-match-data [client match-id]
+  (->> match-id (lol-api client :match :match-data)))
+
+(def match-data (memoize prep-match-data))

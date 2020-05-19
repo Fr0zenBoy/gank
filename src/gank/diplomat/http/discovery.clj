@@ -50,16 +50,16 @@
    :summoner "/cdn/?/data/en_US/summoner.json"})
 
 (s/defn ^:private get-api-endpoints :- s/Str
-        [endpoints-map
-         resource :- s/Keyword
-         filter   :- s/Keyword]
-        (get-in endpoints-map [resource filter]))
+  [endpoints-map
+   resource :- s/Keyword
+   filter   :- s/Keyword]
+  (get-in endpoints-map [resource filter]))
 
 (def get-lol-endpoints (partial get-api-endpoints lol-endpoints))
 
 (def get-tft-endpoints (partial get-api-endpoints tft-endpoints))
 
-(s/defn get-ddragon-endpoints 
+(s/defn get-ddragon-endpoints
   [resource :- s/Keyword]
   (get ddragon-endpoints resource))
 
