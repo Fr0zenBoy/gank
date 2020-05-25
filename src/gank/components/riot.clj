@@ -1,4 +1,4 @@
-(ns gank.components.client
+(ns gank.components.riot
   (:require [com.stuartsierra.component :as component]
             [gank.protocols.riot :as riot-protocol]
             [gank.riot :as riot-impl])
@@ -9,7 +9,7 @@
        id
        (riot-impl/lol-api client resource filter)))
 
-(defrecord Client []
+(defrecord RIOT []
   component/Lifecycle
   (start [this]
     (info "starting the client")
@@ -41,3 +41,5 @@
   (match-by-id! [{:keys [riot-client]} match-id]
     (riot-impl/match-data riot-client match-id)))
 
+(defn new-riot []
+  (map->RIOT {}))
